@@ -1,25 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Main page</title>
+<title>Прочитанные книги</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+font-family: Impact;
+margin: 10;
+padding: 0;
+}
+
+header {
+background-color: #110;
+color: #fff;
+padding: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+</style>
 </head>
+
 <body>
-<h2>Messages</h2>
-<form method="post" action="/add_message">
-    <input type="text" name="text">
-    <input type="text" name="tag">
-    <button type="submit">Add post</button>
+<header>
+<a>Список прочитанных книг</a>
+</header>
+
+<section>
+<form action="{{ url_for('index')}}" method="post" >
+<p>
+<p>
+Введите название прочитанной книги:
+</p>
+<p>
+<input type="text" name="add" value="" required>
+</p>
+<p>
+<input type="submit" value="Добавить" name="searchBtn"></input>
+</p>
+</p>
+
+</form>
+<form action="{{ url_for('add_book')}}" method="post" >
+<button value="All List" name="all"><i>Вывести полный список</i></button>
 </form>
 
-<h3>Messages feed</h3>
-{% for message in messages %}
-<div>{{ message.text }}
-    {% for tag in message.tags %}
-        <b>#{{ tag.text }}</b>
-    {% endfor %}
-</div>
-{% endfor %}
-
+</section>
 </body>
 </html>

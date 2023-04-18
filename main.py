@@ -1,49 +1,39 @@
+import sqlalchemy as db
 import flask
-from flask_sqlalchemy import SQLAlchemy
-
 
 app = flask.Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:123@localhost/test_db7'
-db = SQLAlchemy(app)
 
+engine = db.create_engine('postgresql://postgres:5433@localhost/lab_9')
+connection = engine.connect()
 
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(512), nullable=False)
+metadata = db.MetaData()
 
-    def __init__(self, text, tags):
-        self.text = text
-        self.tags = [
-            Tag(text=tag) for tag in tags.split(',')
-        ]
+books = db.Table('books', metadata,
+                 db.Column('author', db.Text),
+                 db.Column('name', db.Text))
+metadata.create_all(engine)
 
+query = db.insert(books).values(author='A.Gruber', name='Mark of Death')
+Result = connection.execute(query)
 
-class Tag(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(32), nullable=False)
-
-    message_id = db.Column(db.Integer, db.ForeignKey('message.id'), nullable=False)
-    message = db.relationship('Message', backref=db.backref('tags', lazy=True))
+#output = connection.execute(books.select()).fetchall()
+#print(output)
 
 
 @app.route('/', methods=['GET'])
 def hello():
-    return flask.render_template('index.html', messages=Message.query.all())
+    return flask.render_template('index.html', messages=books.query.all())
 
 
-@app.route('/add_message', methods=['POST'])
-def add_message():
-    text = flask.request.form['text']
-    tag = flask.request.form['tag']
+
+@app.route('/add_book', methods=['POST'])
+def add_book():
+    add = flask.request.form['add']
+    submit = flask.request.form['submit']
     # messages.append(Message(text, tag))
-    db.session.add(Message(text, tag))
+    db.session.add(books(add, submit))
     db.session.commit()
 
     return flask.redirect(flask.url_for('hello'))
 
-
-
-
-with app.app_context():
-    db.create_all()
 app.run()
