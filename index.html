@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-<title>Прочитанные книги</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Список прочитанных книг</title>
 <style>
 body {
 font-family: Impact;
@@ -23,31 +21,27 @@ align-items: center;
 
 </style>
 </head>
-
 <body>
 <header>
 <a>Список прочитанных книг</a>
 </header>
-
-<section>
-<form action="{{ url_for('index')}}" method="post" >
-<p>
 <p>
 Введите название прочитанной книги:
 </p>
-<p>
-<input type="text" name="add" value="" required>
-</p>
-<p>
-<input type="submit" value="Добавить" name="searchBtn"></input>
-</p>
-</p>
-
-</form>
-<form action="{{ url_for('add_book')}}" method="post" >
-<button value="All List" name="all"><i>Вывести полный список</i></button>
+<form method="post" action="/add_book">
+    <input type="text" name="author">
+    <input type="text" name="book">
+    <button type="submit">Добавить книгу</button>
 </form>
 
-</section>
+<h3>Прочитанные книги</h3>
+{% for author in authors %}
+<div><i>{{ author.text }}
+    {% for book in author.books %}
+        {{ book.text }}</i>
+    {% endfor %}
+</div>
+{% endfor %}
+
 </body>
 </html>
