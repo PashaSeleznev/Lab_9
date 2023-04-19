@@ -35,9 +35,9 @@ align-items: center;
 </form>
 
 <h3>Прочитанные книги</h3>
-{% for author in authors %}
-<div><i>{{ author.text }}
-    {% for book in author.books %}
+{% for message in messages %}
+<div><i>{{ message.text }}
+    {% for book in message.books %}
         {{ book.text }}</i>
     {% endfor %}
 </div>

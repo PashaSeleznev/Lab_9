@@ -9,7 +9,7 @@ db = SQLAlchemy(app)
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(512), nullable=False)
+    author = db.Column(db.String(512), nullable=False)
 
     def __init__(self, author, books):
         self.author = author
